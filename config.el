@@ -82,9 +82,9 @@
            #'executable-make-buffer-file-executable-if-script-p)
 (add-hook! 'dired-after-readin-hook
            #'+dired-enable-git-info-h )
-(package! dotenv-mode)
-(use-package! dotenv-mode
-  :mode ("\\.env\\.?.*\\'" . dotenv-mode))
+; (package! dotenv-mode)
+; (use-package! dotenv-mode
+;   :mode ("\\.env\\.?.*\\'" . dotenv-mode))
 (map! :leader
       :desc "Navigate/Hydra" :m "w N" #'+hydra/window-nav/body
       :desc "Text-Zoom/Hydra" :m "w f" #'hydra/text-zoom/body)
