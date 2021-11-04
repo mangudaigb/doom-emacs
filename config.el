@@ -88,3 +88,37 @@
 (map! :leader
       :desc "Navigate/Hydra" :m "w N" #'+hydra/window-nav/body
       :desc "Text-Zoom/Hydra" :m "w f" #'hydra/text-zoom/body)
+
+(use-package! dap-mode
+  :defer
+  :custom
+  (dap-auto-configure-mode t)
+  :config
+  ;;; dap for C++
+  (require 'dap-lldb)
+  (setq dap-lldb-debug-program '("/usr/bin/lldb"))
+  (setq dap-lldb-debugged-program-function (lambda () (read-file-name "Select file to debug.")))
+  ;;; Default debug template for C++
+  (dap-register-debug-template
+   "C++ LDB dap"
+   (list :type "lldb"
+         :cwd nil
+         :args nil
+         :request "launch"
+         :program nil))
+  (defun dap-debug-create-or-edit-json-template ()
+    (interactive)
+    (let ((filename (concat (lsp-workspace-root) "/launch.json"))
+          (default "~/.emacs.d/default-C-launch.json"))
+      (unless (file-exists-p filename)
+        (copy-file default filename))
+      (find-file-existing filename))))
+
+(use-package! dap-mode
+  :config
+  (require 'dap-node)
+  (dap-node-setup)
+  (general-define-key
+   :keymaps 'lsp-mode-map
+   :prefix lsp-keymap-prefix
+   "d" '(dap-hydra t :wk "debugger")))
